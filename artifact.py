@@ -176,7 +176,6 @@ class Artifact:
 
     # generate random stats when artifact is created
     def __init__(self):
-
         self.max_level = 20  # max level the artifact can be upgraded to
 
         self.level = 0
@@ -188,7 +187,6 @@ class Artifact:
 
         # generate sub stats
         self.sub_status = {}
-
         for _ in range(4 if random.randint(1, 5) == 1 else 3):  # generate 4 or 3 substats
             self.generate_subset()
 
@@ -250,5 +248,3 @@ class Artifact:
             else:
                 score += self.sub_status[status_name]
         return score
-
-    # def to_exp(self):
