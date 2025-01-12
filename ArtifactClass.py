@@ -3,7 +3,6 @@ import random
 
 
 class Artifact:
-
     # pre-determined stat probabilities obtained from the wiki
     TYPES = ["Flower", "Plume", "Sands", "Goblet", "Circlet"]
 
@@ -178,74 +177,77 @@ class Artifact:
     # generate random stats when artifact is created
     def __init__(self):
 
-        self.MaxLevel = 20  # max level the artifact can be upgraded to
+        self.max_level = 20  # max level the artifact can be upgraded to
 
-        self.Level = 0
-        self.Set = random.randint(0, 1)
-        self.Type = self.TYPES[random.randint(0, len(self.TYPES) - 1)]
-        self.MainStat = random.choices(
-            list(self.ARTIFACT_MAIN_STATS[self.Type]), weights=tuple(self.ARTIFACT_MAIN_STATS[self.Type].values())
+        self.level = 0
+        self.set = random.randint(0, 1)
+        self.type = self.TYPES[random.randint(0, len(self.TYPES) - 1)]
+        self.main_status = random.choices(
+            list(self.ARTIFACT_MAIN_STATS[self.type]), weights=tuple(self.ARTIFACT_MAIN_STATS[self.type].values())
         )[0]
 
         # generate sub stats
-        self.SubStats = {}
+        self.sub_status = {}
 
         for _ in range(4 if random.randint(1, 5) == 1 else 3):  # generate 4 or 3 substats
-
-            self.GenerateSubStat()
+            self.generate_subset()
 
     # when object is printed print the artifact stats
     def __str__(self):
-
         return (
-            f"[Level:{self.Level}]-[Set:{self.Set}]-[Type:{self.Type}]-[MainStat:{self.MainStat}]-[SS1: ({round(list(self.SubStats.items())[0][1],1)} {list(self.SubStats.items())[0][0]})]-[SS2: ({round(list(self.SubStats.items())[1][1],1)} {list(self.SubStats.items())[1][0]})]-[SS3: ({round(list(self.SubStats.items())[2][1],1)} {list(self.SubStats.items())[2][0]})]"
+            f"[level:{self.level}]-[set:{self.set}]-[type:{self.type}]-[main_status:{self.main_status}]-[SS1: ({round(list(self.sub_status.items())[0][1],1)} {list(self.sub_status.items())[0][0]})]-[SS2: ({round(list(self.sub_status.items())[1][1],1)} {list(self.sub_status.items())[1][0]})]-[SS3: ({round(list(self.sub_status.items())[2][1],1)} {list(self.sub_status.items())[2][0]})]"
             + (
-                f"-[SS4: ({round(list(self.SubStats.items())[3][1],1)} {list(self.SubStats.items())[3][0]})]"
-                if len(self.SubStats) == 4
+                f"-[SS4: ({round(list(self.sub_status.items())[3][1],1)} {list(self.sub_status.items())[3][0]})]"
+                if len(self.sub_status) == 4
                 else ""
             )
         )
 
     # function that adds 1 substat to the artifact
-    def GenerateSubStat(self):
-
+    def generate_subset(self):
         stat_generated = False
-
         while not stat_generated:  # generate until substat is not a repeated one
-
             generated_stat = random.choices(
-                list(self.SUB_STATS_CHANCE["ELEM_DMG" if self.MainStat[-3:] == "DMG" else self.MainStat]),
+                list(self.SUB_STATS_CHANCE["ELEM_DMG" if self.main_status[-3:] == "DMG" else self.main_status]),
                 weights=tuple(
-                    self.SUB_STATS_CHANCE["ELEM_DMG" if self.MainStat[-3:] == "DMG" else self.MainStat].values()
+                    self.SUB_STATS_CHANCE["ELEM_DMG" if self.main_status[-3:] == "DMG" else self.main_status].values()
                 ),
             )[0]
 
-            if generated_stat not in self.SubStats:  # if not duplicate
+            if generated_stat not in self.sub_status:  # if not duplicate
 
-                self.SubStats[generated_stat] = self.ARTIFACT_SUB_STATS_ROLL_RANGE[generated_stat][
+                self.sub_status[generated_stat] = self.ARTIFACT_SUB_STATS_ROLL_RANGE[generated_stat][
                     random.randint(0, len(self.ARTIFACT_SUB_STATS_ROLL_RANGE[generated_stat]) - 1)
                 ]
-
                 stat_generated = True
 
     # function to level up artifact by n levels
-    def LevelUp(self, levels):
-
-        original_level = self.Level  # store current level, before level up
-        # self.Level += levels #add levels to arifact
-        self.Level = min(self.Level + levels, self.MaxLevel)  # add levels to arifact but cap at max possible level
-        times_to_upgrade = math.floor(self.Level / 4) - math.floor(
+    def level_up(self, levels):
+        original_level = self.level  # store current level, before level up
+        self.level = min(self.level + levels, self.max_level)  # add levels to arifact but cap at max possible level
+        times_to_upgrade = math.floor(self.level / 4) - math.floor(
             original_level / 4
         )  # calculate how many times it will have substat upgrades
-
-        # print(times_to_upgrade)
-
         for upgrade in range(times_to_upgrade):  # loop amount of stat level ups
-
-            if len(self.SubStats) == 3:  # if level up and 3 stats add one
-                self.GenerateSubStat()
+            if len(self.sub_status) == 3:  # if level up and 3 stats add one
+                self.generate_subset()
             else:  # else level up stat
-                sub_stat_to_upgrade = list(self.SubStats)[random.randint(0, 3)]
-                self.SubStats[sub_stat_to_upgrade] += self.ARTIFACT_SUB_STATS_ROLL_RANGE[sub_stat_to_upgrade][
+                sub_stat_to_upgrade = list(self.sub_status)[random.randint(0, 3)]
+                self.sub_status[sub_stat_to_upgrade] += self.ARTIFACT_SUB_STATS_ROLL_RANGE[sub_stat_to_upgrade][
                     random.randint(0, len(self.ARTIFACT_SUB_STATS_ROLL_RANGE[sub_stat_to_upgrade]) - 1)
                 ]
+
+    def get_score(self, status_name):
+        score = 0
+        if "CR" in self.sub_status:
+            score += self.sub_status["CR"] * 2
+        if "CD" in self.sub_status:
+            score += self.sub_status["CD"]
+
+        if status_name in self.sub_status:
+            if status_name == "EM":
+                score += self.sub_status["EM"] / 4
+            else:
+                score += self.sub_status[status_name]
+
+        return score

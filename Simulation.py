@@ -79,12 +79,9 @@ FoundArifacts = (
 for i in range(Settings["WantedArtifactSimulations"]):
 
     print(f"Simulating artifact farming: {round(i/Settings['WantedArtifactSimulations']*100,1)}%")
-    os.system("cls")
-
     FoundArifacts.append(FindArifact())
 
 
-os.system("cls")
 print("#------------------------[WANTED ARTIFACT]--------------------------------#\n")
 print(f'[Set]------------({Settings["WantedSet"]})')
 print(f'[Type]-----------({Settings["WantedType"]})')
