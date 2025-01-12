@@ -1,0 +1,55 @@
+# Python関連
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+__pycache__/
+*.so
+
+# 環境関連
+.env
+.venv/
+venv/
+env/
+ENV/
+*.virtualenv
+
+# エディタやIDE関連
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ログファイル
+*.log
+
+# テストやカバレッジ関連
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# MyPyや型チェック関連
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# 他の設定ファイル
+*.bak
+*.orig
+*.rej
+
+# デプロイやDocker関連
+*.pid
+*.tar.gz
+*.zip
+
+# プラットフォーム依存
+Thumbs.db
