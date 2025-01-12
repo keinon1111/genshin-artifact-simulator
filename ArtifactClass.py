@@ -249,5 +249,6 @@ class Artifact:
                 score += self.sub_status["EM"] / 4
             else:
                 score += self.sub_status[status_name]
-
         return score
+
+    # def to_exp(self):
