@@ -1,10 +1,10 @@
 import math
 import random
 
+TYPES = ["Flower", "Plume", "Sands", "Goblet", "Circlet"]
+
 
 class Artifact:
-    # pre-determined stat probabilities obtained from the wiki
-    TYPES = ["Flower", "Plume", "Sands", "Goblet", "Circlet"]
 
     ARTIFACT_MAIN_STATS = {
         "Flower": {"HP": 100},
@@ -180,7 +180,7 @@ class Artifact:
 
         self.level = 0
         self.set = random.randint(0, 1)
-        self.type = self.TYPES[random.randint(0, len(self.TYPES) - 1)]
+        self.type = TYPES[random.randint(0, len(TYPES) - 1)]
         self.main_status = random.choices(
             list(self.ARTIFACT_MAIN_STATS[self.type]), weights=tuple(self.ARTIFACT_MAIN_STATS[self.type].values())
         )[0]
